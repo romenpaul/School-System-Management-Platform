@@ -8,7 +8,10 @@ namespace SE_1st_projects.UnitOfWork.Interface
         IStudentRepository Student { get; }
         IRoleRepository Role { get; }
         IUserRepository User { get; }
+
+        // 🔥 ADD THIS
+        ITeacherRepository Teacher { get; }
+
         Task<int> SaveChangesAsync();
     }
-
 }

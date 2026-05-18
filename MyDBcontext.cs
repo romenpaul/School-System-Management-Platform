@@ -16,6 +16,10 @@ public class MyDBContext : DbContext
 
     public DbSet<Role> Roles { get; set; }
 
+    public DbSet<Teacher> Teachers { get; set; }
+
+    public DbSet<Routine> Routines { get; set; }
+
     // 🔥 THIS PART YOU NEED TO ADD
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

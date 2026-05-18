@@ -1,30 +1,41 @@
 using SE_1st_projects.Repository.Interface;
 using SE_1st_projects.UnitOfWork.Interface;
 
-namespace SE_1st_projects.UnitOfWork.Application
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    private readonly MyDBContext _context;
+
+    public UnitOfWork(
+        MyDBContext context,
+        IDepartmentRepository departmentRepository,
+        IStudentRepository studentRepository,
+        IRoleRepository roleRepository,
+        IUserRepository userRepository,
+        ITeacherRepository teacherRepository
+    )
     {
-        private readonly MyDBContext _Context;
+        _context = context;
 
-        public UnitOfWork(MyDBContext context, IDepartmentRepository departmentRepository, IStudentRepository studentRepository, IRoleRepository roleRepository, IUserRepository userRepository)
-        {
-            _Context = context;
-            Department = departmentRepository;
-            Student = studentRepository;
-            Role = roleRepository;
-            User = userRepository;
-        }
+        Department = departmentRepository;
+        Student = studentRepository;
+        Role = roleRepository;
+        User = userRepository;
+        Teacher = teacherRepository; // ✅ IMPORTANT
+    }
 
-        public IDepartmentRepository Department { get; }
-        public IStudentRepository Student { get; }
-        public IRoleRepository Role { get; }
-        public IUserRepository User { get; }
+    public IDepartmentRepository Department { get; }
+    public IStudentRepository Student { get; }
+    public IRoleRepository Role { get; }
+    public IUserRepository User { get; }
+    public ITeacherRepository Teacher { get; }
 
-        public async Task<int> SaveChangesAsync() =>
-            await _Context.SaveChangesAsync();
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
 
-        public void Dispose() =>
-            _Context.Dispose();
+    public void Dispose()
+    {
+        _context.Dispose();
     }
 }

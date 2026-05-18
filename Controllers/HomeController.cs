@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SE_1st_projects.Models;
+using SE_1st_projects.Service.Interface;
 using System.Diagnostics;
 
 namespace SE_1st_projects.Controllers
@@ -8,13 +9,34 @@ namespace SE_1st_projects.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUserService _userService;
+        private readonly IStudentService _studentService;
+        private readonly IRoleService _roleService;
+
+        public HomeController(
+            ILogger<HomeController> logger,
+            IUserService userService,
+            IStudentService studentService,
+            IRoleService roleService
+        )
         {
             _logger = logger;
+
+            _userService = userService;
+            _studentService = studentService;
+            _roleService = roleService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var users = _userService.GetAll();
+            var students = await _studentService.GetAllAsync();
+            var roles = _roleService.GetAll();
+
+            ViewBag.TotalUsers = users.Count;
+            ViewBag.TotalStudents = students.Count();
+            
+
             return View();
         }
 
@@ -23,10 +45,21 @@ namespace SE_1st_projects.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [ResponseCache(
+            Duration = 0,
+            Location = ResponseCacheLocation.None,
+            NoStore = true
+        )]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(
+                new ErrorViewModel
+                {
+                    RequestId =
+                        Activity.Current?.Id
+                        ?? HttpContext.TraceIdentifier
+                }
+            );
         }
     }
 }

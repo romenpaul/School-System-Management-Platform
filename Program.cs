@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using SE_1st_projects;
 using SE_1st_projects.Repository.Application;
 using SE_1st_projects.Repository.Interface;
 using SE_1st_projects.Service.Application;
 using SE_1st_projects.Service.Interface;
-using SE_1st_projects.UnitOfWork.Application;
 using SE_1st_projects.UnitOfWork.Interface;
 
 
@@ -39,6 +37,10 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+
+//Teacher
+builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
 
 var app = builder.Build();
 

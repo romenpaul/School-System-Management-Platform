@@ -8,15 +8,20 @@ namespace SE_1st_projects.Service.Application
     {
         private readonly IUnitOfWork _uow;
 
-        public DepartmentService(IUnitOfWork uow) => _uow = uow;
+        public DepartmentService(IUnitOfWork uow)
+        {
+            _uow = uow;
+        }
 
-        public async Task<IEnumerable<DepartmentModel>> GetAllAsync() =>
-            await _uow.Department.GetAllAsync();
+        public async Task<IEnumerable<DepartmentModel>> GetAllAsync()
+        {
+            return await _uow.Department.GetAllAsync();
+        }
 
-        public async Task<DepartmentModel?> GetByIdAsync(int id) =>
-            await _uow.Department.GetByIdAsync(id);
-
-
+        public async Task<DepartmentModel?> GetByIdAsync(int id)
+        {
+            return await _uow.Department.GetByIdAsync(id);
+        }
 
         public async Task<DepartmentModel> CreateAsync(DepartmentModel department)
         {
@@ -24,32 +29,33 @@ namespace SE_1st_projects.Service.Application
             await _uow.SaveChangesAsync();
             return department;
         }
+
         public async Task<bool> UpdateAsync(int id, DepartmentModel department)
         {
-            var existingDepartment = await _uow.Department.GetByIdAsync(id);
-            if (existingDepartment == null) return false;
-            existingDepartment.DepartmentName = department.DepartmentName;
+            var existing = await _uow.Department.GetByIdAsync(id);
 
-            _uow.Department.Update(existingDepartment);
+            if (existing == null)
+                return false;
+
+            existing.DepartmentName = department.DepartmentName;
+
+            _uow.Department.Update(existing);
             await _uow.SaveChangesAsync();
+
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             var department = await _uow.Department.GetByIdAsync(id);
-            if (department == null) return false;
+
+            if (department == null)
+                return false;
+
             _uow.Department.Delete(department);
             await _uow.SaveChangesAsync();
+
             return true;
         }
-
-        public async Task<IEnumerable<DepartmentModel>> GetINIdAsync()
-        {
-
-            throw new NotImplementedException();
-        }
-
-
     }
 }
